@@ -1,0 +1,7 @@
+# Build requirements for creating macOS binary
+pyinstaller>=6.0.0
+setuptools>=65.0.0
+wheel>=0.38.0
+
+# Include runtime requirements
+-r requirements.txt

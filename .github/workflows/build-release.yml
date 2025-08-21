@@ -1,0 +1,107 @@
+name: Build and Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+jobs:
+  build-macos:
+    runs-on: macos-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements-build.txt
+    
+    - name: Build binary
+      run: |
+        python scripts/build_binary.py
+    
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: market-scanner-macos
+        path: dist/market-scanner-macos.zip
+    
+    - name: Create Release
+      if: startsWith(github.ref, 'refs/tags/')
+      uses: softprops/action-gh-release@v1
+      with:
+        files: |
+          dist/market-scanner-macos.zip
+          dist/market-scanner
+        body: |
+          # Market Scanner v${{ github.ref_name }}
+          
+          🚀 **Autonomous Market Scanner** - Find symbols guaranteed to outperform Bitcoin
+          
+          ## 🆓 100% Free to Use
+          - Uses only FREE APIs (Yahoo Finance, Alpha Vantage, Financial Modeling Prep)
+          - No paid subscriptions required
+          - Works out of the box
+          
+          ## 📦 Installation (macOS)
+          
+          ### Option 1: Download Binary (Recommended)
+          1. Download `market-scanner-macos.zip`
+          2. Extract and run `./install.sh`
+          3. Run `market-scanner scan`
+          
+          ### Option 2: Direct Binary
+          1. Download `market-scanner` binary
+          2. Make executable: `chmod +x market-scanner`
+          3. Run: `./market-scanner scan`
+          
+          ## 🎯 Quick Start
+          ```bash
+          # One-button scan
+          market-scanner scan
+          
+          # Start API for Claude integration  
+          market-scanner api
+          
+          # Quick analysis of specific symbols
+          market-scanner quick TSLA NVDA PLTR
+          ```
+          
+          ## 🤖 Claude Integration
+          
+          Start the API server and Claude can call these endpoints:
+          
+          - `POST /scan` - Run market scan
+          - `POST /quick-analysis` - Analyze specific symbols
+          - `GET /performance` - View performance stats
+          - `GET /btc-benchmark` - Get Bitcoin benchmark
+          
+          See `claude_integration.md` for complete API documentation.
+          
+          ## 🔧 Optional API Keys (for better performance)
+          
+          ```bash
+          export ALPHA_VANTAGE_KEY="your_free_key"  # 500 requests/day
+          export FMP_KEY="your_free_key"            # 250 requests/day
+          ```
+          
+          ## 📋 System Requirements
+          - macOS 10.15+ (Catalina or later)
+          - No additional dependencies required
+          
+          ## 🆘 Support
+          - Issues: Report bugs on GitHub
+          - Documentation: See README.md and claude_integration.md
+          
+          **Happy trading! 📈**
+        draft: false
+        prerelease: false
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
