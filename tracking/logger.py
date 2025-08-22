@@ -7,8 +7,8 @@ from typing import List, Dict, Optional, Tuple
 from dataclasses import dataclass, asdict
 from pathlib import Path
 
-from ..utils import ScanResult, logger
-from ..config import config
+from utils import ScanResult, logger
+from config import config
 
 @dataclass
 class TradeEntry:

@@ -6,10 +6,10 @@ from typing import Dict, List, Optional, Tuple
 from dataclasses import dataclass, asdict
 from datetime import datetime, timedelta
 
-from ..utils import MarketData, ScanResult, logger
-from ..signals import IgnitionEngine, PressureEngine, FuelEngine, IgnitionSignal, PressureSignal, FuelSignal
-from ..config import config
-from .benchmark import BTCBenchmark
+from utils import MarketData, ScanResult, logger
+from signals import IgnitionEngine, PressureEngine, FuelEngine, IgnitionSignal, PressureSignal, FuelSignal
+from config import config
+from benchmark import BTCBenchmark
 
 @dataclass
 class CompositeScore:

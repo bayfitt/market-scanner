@@ -5,8 +5,8 @@ import numpy as np
 from typing import Dict, Optional, Tuple
 from dataclasses import dataclass
 
-from ..utils import MarketData, calculate_ema, calculate_bollinger_bands, logger
-from ..config import config
+from utils import MarketData, calculate_ema, calculate_bollinger_bands, logger
+from config import config
 
 @dataclass
 class IgnitionSignal:

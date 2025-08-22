@@ -7,8 +7,8 @@ import pandas as pd
 from datetime import datetime, timedelta
 from typing import Dict, Optional
 
-from ..config import config
-from ..utils import logger
+from config import config
+from utils import logger
 
 class BTCBenchmark:
     """Handles Bitcoin benchmarking for candidate comparison"""

@@ -13,8 +13,8 @@ from typing import Dict, List, Optional, Any
 from dataclasses import dataclass
 from enum import Enum
 
-from ..utils import logger
-from ..config import config
+from utils import logger
+from config import config
 
 class OrderType(Enum):
     MARKET = "market"

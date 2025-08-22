@@ -8,8 +8,8 @@ from rich.table import Table
 from rich.panel import Panel
 from rich.text import Text
 
-from ..utils import ScanResult, format_percentage, format_currency
-from ..config import config
+from utils import ScanResult, format_percentage, format_currency
+from config import config
 
 class OutputFormatter:
     """Formats and displays scan results in various formats"""

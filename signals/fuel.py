@@ -4,8 +4,8 @@ import numpy as np
 from typing import Dict, List, Optional
 from dataclasses import dataclass
 
-from ..utils import MarketData, logger
-from ..config import config
+from utils import MarketData, logger
+from config import config
 
 @dataclass
 class FundamentalData:

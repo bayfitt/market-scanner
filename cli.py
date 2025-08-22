@@ -12,10 +12,10 @@ from rich.console import Console
 from rich.panel import Panel
 from rich.text import Text
 
-from .execution import MarketScanner, OutputFormatter
-from .tracking import PerformanceTracker
-from .config import config
-from .utils import logger, setup_logging
+from execution import MarketScanner, OutputFormatter
+from tracking import PerformanceTracker
+from config import config
+from utils import logger, setup_logging
 
 console = Console()
 
@@ -236,7 +236,7 @@ def validate():
 def universe(add, remove, list_symbols, load):
     """🌌 Manage symbol universe"""
     
-    from .data import UniverseManager
+    from data import UniverseManager
     
     universe_manager = UniverseManager()
     
@@ -276,7 +276,7 @@ def api(host, port):
         border_style="green"
     ))
     
-    from .api import run_server
+    from api import run_server
     
     try:
         run_server(host=host, port=port)
@@ -287,7 +287,7 @@ def api(host, port):
 def version():
     """📋 Show version information"""
     
-    from . import __version__
+    __version__ = "1.0.0"
     
     console.print(Panel.fit(
         f"[bold cyan]🚀 Market Scanner[/bold cyan]\n"

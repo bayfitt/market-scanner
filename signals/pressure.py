@@ -5,8 +5,8 @@ from typing import Dict, Optional, List, Tuple
 from dataclasses import dataclass
 from scipy.stats import norm
 
-from ..utils import MarketData, OptionsData, logger
-from ..config import config
+from utils import MarketData, OptionsData, logger
+from config import config
 
 @dataclass
 class GammaWall:

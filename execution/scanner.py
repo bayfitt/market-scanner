@@ -5,10 +5,10 @@ import time
 from datetime import datetime
 from typing import List, Optional, Dict
 
-from ..data import DataManager
-from ..scoring import CompositeScorer
-from ..utils import ScanResult, MarketData, logger
-from ..config import config
+from data import DataManager
+from scoring import CompositeScorer
+from utils import ScanResult, MarketData, logger
+from config import config
 
 class MarketScanner:
     """Main scanner that orchestrates the entire scanning process"""
