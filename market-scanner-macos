@@ -1,0 +1,138 @@
+#!/usr/bin/env python3
+# Market Scanner for macOS ARM64
+
+"""
+Simple Market Scanner - Standalone Bitcoin Outperformer Detection
+"""
+
+import click
+import sys
+import requests
+import json
+from datetime import datetime
+from rich.console import Console
+from rich.table import Table
+from rich.panel import Panel
+
+console = Console()
+
+@click.group()
+def cli():
+    """🚀 Market Scanner - Find Bitcoin Outperformers"""
+    pass
+
+@cli.command()
+@click.option('--symbols', default='AAPL,TSLA,NVDA,META,GOOGL', help='Comma-separated stock symbols')
+@click.option('--timeframe', default='1d', help='Timeframe for analysis')
+def scan(symbols, timeframe):
+    """🔍 Scan for symbols that outperform Bitcoin"""
+    console.print(Panel("🚀 Market Scanner - Bitcoin Outperformer Detection", style="bold blue"))
+    
+    symbol_list = symbols.split(',')
+    btc_price = get_bitcoin_price()
+    
+    if not btc_price:
+        console.print("❌ Could not fetch Bitcoin price", style="bold red")
+        return
+    
+    console.print(f"₿ Bitcoin Price: ${btc_price:,.2f}", style="bold yellow")
+    console.print("\n🔍 Scanning market for outperformers...")
+    
+    table = Table(title="Market Scanner Results")
+    table.add_column("Symbol", style="cyan", no_wrap=True)
+    table.add_column("Price", style="magenta")
+    table.add_column("Change %", style="green")
+    table.add_column("vs BTC", style="bold")
+    table.add_column("Signal", style="bold")
+    
+    for symbol in symbol_list:
+        data = get_stock_data(symbol)
+        if data:
+            change_pct = data.get('change_percent', 0)
+            btc_change = 2.5  # Mock BTC change
+            
+            vs_btc = change_pct - btc_change
+            signal = "🚀 BUY" if vs_btc > 1 else "⚠️ WATCH" if vs_btc > 0 else "📉 SELL"
+            
+            table.add_row(
+                symbol,
+                f"${data.get('price', 0):.2f}",
+                f"{change_pct:+.2f}%",
+                f"{vs_btc:+.2f}%",
+                signal
+            )
+    
+    console.print(table)
+    console.print("\n✅ Scan complete!", style="bold green")
+
+def get_bitcoin_price():
+    """Get current Bitcoin price"""
+    try:
+        url = "https://api.coindesk.com/v1/bpi/currentprice/USD.json"
+        response = requests.get(url, timeout=10)
+        data = response.json()
+        price_str = data['bpi']['USD']['rate'].replace(',', '').replace('$', '')
+        return float(price_str)
+    except Exception as e:
+        console.print(f"Error fetching BTC price: {e}", style="red")
+        return None
+
+def get_stock_data(symbol):
+    """Get stock data (mock implementation)"""
+    # This is a simplified mock - in production would use real APIs
+    import random
+    return {
+        'price': random.uniform(50, 500),
+        'change_percent': random.uniform(-5, 8)
+    }
+
+@cli.command()
+def api():
+    """🌐 Start API server for Claude integration"""
+    console.print(Panel("🌐 Starting Market Scanner API", style="bold blue"))
+    console.print("📡 API will be available at http://localhost:8888")
+    console.print("💡 Use Ctrl+C to stop")
+    
+    # Simple API implementation
+    from http.server import HTTPServer, BaseHTTPRequestHandler
+    import json
+    
+    class APIHandler(BaseHTTPRequestHandler):
+        def do_GET(self):
+            if self.path == '/scan':
+                # Return mock scan results
+                results = {
+                    'timestamp': datetime.now().isoformat(),
+                    'btc_price': 45000,
+                    'outperformers': [
+                        {'symbol': 'NVDA', 'vs_btc': '+3.2%', 'signal': 'BUY'},
+                        {'symbol': 'TSLA', 'vs_btc': '+1.8%', 'signal': 'WATCH'}
+                    ]
+                }
+                
+                self.send_response(200)
+                self.send_header('Content-type', 'application/json')
+                self.end_headers()
+                self.wfile.write(json.dumps(results).encode())
+            else:
+                self.send_response(404)
+                self.end_headers()
+    
+    server = HTTPServer(('localhost', 8888), APIHandler)
+    try:
+        server.serve_forever()
+    except KeyboardInterrupt:
+        console.print("\n🛑 API server stopped", style="bold red")
+
+@cli.command()
+def version():
+    """📋 Show version information"""
+    console.print(Panel("Market Scanner v1.0.0\n🎯 Autonomous Bitcoin Outperformer Detection", style="bold green"))
+
+if __name__ == '__main__':
+    cli()
+
+
+if __name__ == "__main__":
+    scanner = SimpleScanner()
+    scanner.run()
